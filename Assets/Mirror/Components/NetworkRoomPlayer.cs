@@ -128,7 +128,7 @@ namespace Mirror
         /// <summary>
         /// Render a UI for the room. Override to provide your own UI
         /// </summary>
-        public virtual void OnGUI()
+        /*public virtual void OnGUI()
         {
             if (!showRoomGUI)
                 return;
@@ -145,7 +145,7 @@ namespace Mirror
                 DrawPlayerReadyState();
                 DrawPlayerReadyButton();
             }
-        }
+        }*/
 
         void DrawPlayerReadyState()
         {

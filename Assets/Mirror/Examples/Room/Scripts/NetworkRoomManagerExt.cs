@@ -83,7 +83,7 @@ namespace Mirror.Examples.NetworkRoom
 #endif
         }
 
-        public override void OnGUI()
+        /*public override void OnGUI()
         {
             base.OnGUI();
 
@@ -94,6 +94,6 @@ namespace Mirror.Examples.NetworkRoom
 
                 ServerChangeScene(GameplayScene);
             }
-        }
+        }*/
     }
 }

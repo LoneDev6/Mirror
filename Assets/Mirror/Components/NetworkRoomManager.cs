@@ -662,7 +662,7 @@ namespace Mirror
         /// <summary>
         /// virtual so inheriting classes can roll their own
         /// </summary>
-        public virtual void OnGUI()
+        /*public virtual void OnGUI()
         {
             if (!showRoomGUI)
                 return;
@@ -677,7 +677,7 @@ namespace Mirror
 
             if (Utils.IsSceneActive(RoomScene))
                 GUI.Box(new Rect(10f, 180f, 520f, 150f), "PLAYERS");
-        }
+        }*/
 
         #endregion
     }

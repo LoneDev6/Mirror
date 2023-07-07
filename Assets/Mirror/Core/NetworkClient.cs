@@ -104,7 +104,7 @@ namespace Mirror
         internal static bool isSpawnFinished;
 
         // Disabled scene objects that can be spawned again, by sceneId.
-        internal static readonly Dictionary<ulong, NetworkIdentity> spawnableObjects =
+        public static readonly Dictionary<ulong, NetworkIdentity> spawnableObjects =
             new Dictionary<ulong, NetworkIdentity>();
 
         internal static Unbatcher unbatcher = new Unbatcher();

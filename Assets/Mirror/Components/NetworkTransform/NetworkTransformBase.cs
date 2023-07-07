@@ -24,6 +24,8 @@ namespace Mirror
 {
     public abstract class NetworkTransformBase : NetworkBehaviour
     {
+        //#define SHOW_OVERLAY
+
         // target transform to sync. can be on a child.
         // TODO this field is kind of unnecessary since we now support child NetworkBehaviours
         [Header("Target")]
@@ -353,7 +355,7 @@ namespace Mirror
         }
 
         // OnGUI allocates even if it does nothing. avoid in release.
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if SHOW_OVERLAY == true && (UNITY_EDITOR || DEVELOPMENT_BUILD)
         // debug ///////////////////////////////////////////////////////////////
         protected virtual void OnGUI()
         {

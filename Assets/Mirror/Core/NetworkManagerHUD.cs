@@ -21,7 +21,7 @@ namespace Mirror
             manager = GetComponent<NetworkManager>();
         }
 
-        void OnGUI()
+        /*void OnGUI()
         {
             GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 250, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
@@ -49,7 +49,7 @@ namespace Mirror
             StopButtons();
 
             GUILayout.EndArea();
-        }
+        }*/
 
         void StartButtons()
         {
