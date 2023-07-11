@@ -655,6 +655,7 @@ namespace Mirror
 
         internal void OnStartServer()
         {
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStartServer should be caught, so that one
@@ -700,6 +701,7 @@ namespace Mirror
 
             clientStarted = true;
 
+            UpdateNetworkBehaviourCache();
             // Debug.Log($"OnStartClient {gameObject} netId:{netId}");
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
@@ -726,6 +728,7 @@ namespace Mirror
             // OnStopClient if OnStartClient hasn't been called.
             if (!clientStarted) return;
 
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStopClient should be caught, so that
@@ -771,6 +774,7 @@ namespace Mirror
                 return;
             previousLocalPlayer = this;
 
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStartLocalPlayer should be caught, so that
@@ -791,6 +795,7 @@ namespace Mirror
 
         internal void OnStopLocalPlayer()
         {
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStopLocalPlayer should be caught, so that
@@ -816,6 +821,7 @@ namespace Mirror
             ulong ownerMask = 0;
             ulong observerMask = 0;
 
+            UpdateNetworkBehaviourCache();
             NetworkBehaviour[] components = NetworkBehaviours;
             for (int i = 0; i < components.Length; ++i)
             {
@@ -883,6 +889,16 @@ namespace Mirror
             ulong nthBit = (ulong)(1 << index);
             return (mask & nthBit) != 0;
         }
+        
+        // Somehow sometimes NetworkBehaviours cache contains destroyed components (null)
+        // This function regenerates the cache in case any of the elements is invalid.
+        private void UpdateNetworkBehaviourCache()
+        {
+            if (NetworkBehaviours.Any(behaviour => !behaviour))
+            {
+                InitializeNetworkBehaviours();
+            }
+        }
 
         // serialize components into writer on the server.
         // check ownerWritten/observersWritten to know if anything was written
@@ -890,6 +906,8 @@ namespace Mirror
         // if any Components are dirty before creating writers
         internal void SerializeServer(bool initialState, NetworkWriter ownerWriter, NetworkWriter observersWriter)
         {
+            UpdateNetworkBehaviourCache();
+
             // ensure NetworkBehaviours are valid before usage
             ValidateComponents();
             NetworkBehaviour[] components = NetworkBehaviours;
@@ -915,6 +933,8 @@ namespace Mirror
                 for (int i = 0; i < components.Length; ++i)
                 {
                     NetworkBehaviour comp = components[i];
+                    if (!comp)
+                        continue;
 
                     // is the component dirty for anyone (owner or observers)?
                     // may be serialized to owner, observer, both, or neither.
@@ -950,6 +970,7 @@ namespace Mirror
         // serialize components into writer on the client.
         internal void SerializeClient(NetworkWriter writer)
         {
+            UpdateNetworkBehaviourCache();
             // ensure NetworkBehaviours are valid before usage
             ValidateComponents();
             NetworkBehaviour[] components = NetworkBehaviours;
@@ -1000,6 +1021,7 @@ namespace Mirror
         // there's no 'initialState'. server always knows the initial state.
         internal bool DeserializeServer(NetworkReader reader)
         {
+            UpdateNetworkBehaviourCache();
             // ensure NetworkBehaviours are valid before usage
             ValidateComponents();
             NetworkBehaviour[] components = NetworkBehaviours;
@@ -1043,6 +1065,7 @@ namespace Mirror
         // deserialize components from server on the client.
         internal void DeserializeClient(NetworkReader reader, bool initialState)
         {
+            UpdateNetworkBehaviourCache();
             // ensure NetworkBehaviours are valid before usage
             ValidateComponents();
             NetworkBehaviour[] components = NetworkBehaviours;
@@ -1127,6 +1150,7 @@ namespace Mirror
         //       but we've added SyncObject.isRecording since.
         internal void ClearDirtyComponentsDirtyBits()
         {
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 if (comp.IsDirty())
@@ -1332,6 +1356,7 @@ namespace Mirror
 
         internal void OnStartAuthority()
         {
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStartAuthority should be caught, so that one
@@ -1352,6 +1377,7 @@ namespace Mirror
 
         internal void OnStopAuthority()
         {
+            UpdateNetworkBehaviourCache();
             foreach (NetworkBehaviour comp in NetworkBehaviours)
             {
                 // an exception in OnStopAuthority should be caught, so that one
